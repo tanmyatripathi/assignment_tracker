@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Student Assignment Tracker - @yourstudentsupporter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .add-form {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            align-items: end;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .form-group input, .form-group select {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+        
+        .add-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .add-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .assignments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .assignments-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .assignments-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .assignments-table tr:hover {
+            background: #f7fafc;
+        }
+        
+        .priority-high {
+            background: #fed7d7 !important;
+            color: #c53030;
+        }
+        
+        .priority-medium {
+            background: #feebc8 !important;
+            color: #dd6b20;
+        }
+        
+        .priority-low {
+            background: #c6f6d5 !important;
+            color: #38a169;
+        }
+        
+        .days-urgent {
+            background: #fed7d7;
+            color: #c53030;
+            font-weight: bold;
+        }
+        
+        .days-soon {
+            background: #feebc8;
+            color: #dd6b20;
+        }
+        
+        .days-ok {
+            color: #38a169;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            transition: width 0.3s;
+        }
+        
+        .delete-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .gpa-section {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .gpa-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .watermark {
+            text-align: center;
+            margin-top: 20px;
+            color: #718096;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .add-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .assignments-table {
+                font-size: 14px;
+            }
+            
+            .assignments-table th,
+            .assignments-table td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Ultimate Assignment Tracker</h1>
+            <p>Stay organized and never miss a deadline again! By @yourstudentsupporter</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalAssignments">0</div>
+                <div>Total Assignments</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completedAssignments">0</div>
+                <div>Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="urgentAssignments">0</div>
+                <div>Due Soon</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgProgress">0%</div>
+                <div>Avg Progress</div>
+            </div>
+        </div>
+        
+        <div class="add-form">
+            <div class="form-group">
+                <label>Assignment Name</label>
+                <input type="text" id="assignmentName" placeholder="e.g., Math Homework">
+            </div>
+            <div class="form-group">
+                <label>Subject</label>
+                <select id="subject">
+                    <option>Math</option>
+                    <option>English</option>
+                    <option>Science</option>
+                    <option>History</option>
+                    <option>Computer Science</option>
+                    <option>Art</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Due Date</label>
+                <input type="date" id="dueDate">
+            </div>
+            <div class="form-group">
+                <label>Priority</label>
+                <select id="priority">
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Progress %</label>
+                <input type="number" id="progress" min="0" max="100" value="0">
+            </div>
+            <button class="add-btn" onclick="addAssignment()">Add Assignment</button>
+        </div>
+        
+        <table class="assignments-table">
+            <thead>
+                <tr>
+                    <th>Assignment</th>
+                    <th>Subject</th>
+                    <th>Due Date</th>
+                    <th>Days Left</th>
+                    <th>Priority</th>
+                    <th>Progress</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="assignmentsTable">
+                <!-- Assignments will be added here -->
+            </tbody>
+        </table>
+        
+        <div class="gpa-section">
+            <div class="gpa-display" id="gpaDisplay">4.0</div>
+            <div>Current GPA Estimate</div>
+            <p style="margin-top: 10px; font-size: 14px;">Based on your assignment completion rate</p>
+        </div>
+        
+        <div class="watermark">
+            <p>Created with ❤️ by @yourstudentsupporter | Get more study tips on TikTok & Instagram!</p>
+        </div>
+    </div>
+
+    <script>
+        let assignments = [];
+        let nextId = 1;
+
+        document.getElementById('dueDate').valueAsDate = new Date(Date.now() + 86400000);
+
+        function addAssignment() {
+            const name = document.getElementById('assignmentName').value;
+            const subject = document.getElementById('subject').value;
+            const dueDate = document.getElementById('dueDate').value;
+            const priority = document.getElementById('priority').value;
+            const progress = parseInt(document.getElementById('progress').value);
+
+            if (!name || !dueDate) {
+                alert('Please fill in assignment name and due date!');
+                return;
+            }
+
+            const assignment = {
+                id: nextId++,
+                name,
+                subject,
+                dueDate,
+                priority,
+                progress
+            };
+
+            assignments.push(assignment);
+            clearForm();
+            updateTable();
+            updateStats();
+        }
+
+        function clearForm() {
+            document.getElementById('assignmentName').value = '';
+            document.getElementById('progress').value = '0';
+            document.getElementById('dueDate').valueAsDate = new Date(Date.now() + 86400000);
+        }
+
+        function deleteAssignment(id) {
+            assignments = assignments.filter(a => a.id !== id);
+            updateTable();
+            updateStats();
+        }
+
+        function updateProgress(id, newProgress) {
+            const assignment = assignments.find(a => a.id === id);
+            if (assignment) {
+                assignment.progress = newProgress;
+                updateStats();
+            }
+        }
+
+        function calculateDaysLeft(dueDate) {
+            const today = new Date();
+            const due = new Date(dueDate);
+            const diffTime = due - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        function getDaysClass(days) {
+            if (days < 0) return 'days-urgent';
+            if (days <= 3) return 'days-urgent';
+            if (days <= 7) return 'days-soon';
+            return 'days-ok';
+        }
+
+        function updateTable() {
+            const tbody = document.getElementById('assignmentsTable');
+            tbody.innerHTML = '';
+
+            const sortedAssignments = [...assignments].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+            sortedAssignments.forEach(assignment => {
+                const daysLeft = calculateDaysLeft(assignment.dueDate);
+                const daysText = daysLeft < 0 ? `${Math.abs(daysLeft)} days overdue` : `${daysLeft} days`;
+                
+                const row = document.createElement('tr');
+                row.className = `priority-${assignment.priority}`;
+                row.innerHTML = `
+                    <td><strong>${assignment.name}</strong></td>
+                    <td>${assignment.subject}</td>
+                    <td>${new Date(assignment.dueDate).toLocaleDateString()}</td>
+                    <td class="${getDaysClass(daysLeft)}">${daysText}</td>
+                    <td><span style="text-transform: capitalize; font-weight: bold;">${assignment.priority}</span></td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${assignment.progress}%"></div>
+                        </div>
+                        <input type="range" min="0" max="100" value="${assignment.progress}" 
+                               onchange="updateProgress(${assignment.id}, this.value)"
+                               style="width: 100%; margin-top: 5px;">
+                        <small>${assignment.progress}%</small>
+                    </td>
+                    <td><button class="delete-btn" onclick="deleteAssignment(${assignment.id})">Delete</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateStats() {
+            const total = assignments.length;
+            const completed = assignments.filter(a => a.progress >= 100).length;
+            const urgent = assignments.filter(a => calculateDaysLeft(a.dueDate) <= 3 && a.progress < 100).length;
+            const avgProgress = total > 0 ? Math.round(assignments.reduce((sum, a) => sum + a.progress, 0) / total) : 0;
+
+            document.getElementById('totalAssignments').textContent = total;
+            document.getElementById('completedAssignments').textContent = completed;
+            document.getElementById('urgentAssignments').textContent = urgent;
+            document.getElementById('avgProgress').textContent = avgProgress + '%';
+
+            let estimatedGPA = 4.0;
+            if (avgProgress < 60) estimatedGPA = 2.0;
+            else if (avgProgress < 70) estimatedGPA = 2.5;
+            else if (avgProgress < 80) estimatedGPA = 3.0;
+            else if (avgProgress < 90) estimatedGPA = 3.5;
+            else if (avgProgress < 95) estimatedGPA = 3.8;
+            
+            document.getElementById('gpaDisplay').textContent = estimatedGPA.toFixed(1);
+        }
+
+        function addSampleData() {
+            const samples = [
+                { name: 'Math Quiz Ch. 5', subject: 'Math', dueDate: '2025-09-05', priority: 'high', progress: 25 },
+                { name: 'History Essay', subject: 'History', dueDate: '2025-09-08', priority: 'medium', progress: 60 },
+                { name: 'Science Lab Report', subject: 'Science', dueDate: '2025-09-12', priority: 'low', progress: 0 },
+                { name: 'English Reading Assignment', subject: 'English', dueDate: '2025-09-04', priority: 'high', progress: 90 }
+            ];
+            
+            samples.forEach(sample => {
+                assignments.push({ id: nextId++, ...sample });
+            });
+            
+            updateTable();
+            updateStats();
+        }
+
+        window.onload = function() {
+            addSampleData();
+        };
+    </script>
+</body>
+</html>
