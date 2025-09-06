@@ -416,7 +416,7 @@
             const total = assignments.length;
             const completed = assignments.filter(a => a.progress >= 100).length;
             const urgent = assignments.filter(a => calculateDaysLeft(a.dueDate) <= 3 && a.progress < 100).length;
-            const avgProgress = total > 0 ? Math.round(assignments.reduce((sum, a) => sum + a.progress, 0) / total) : 0;
+            const avgProgress = total > 0 ? Math.round(assignments.reduce((sum, a) => sum + parseInt(a.progress), 0) / total) : 0;
 
             console.log("All assignments:", assignments);
             console.log("Progress values:", assignments.map(a => a.progress));
