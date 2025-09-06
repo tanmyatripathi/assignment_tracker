@@ -196,14 +196,6 @@
             font-size: 12px;
         }
         
-        .gpa-section {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-            text-align: center;
-        }
-        
         .gpa-display {
             font-size: 3rem;
             font-weight: bold;
@@ -425,6 +417,13 @@
             const completed = assignments.filter(a => a.progress >= 100).length;
             const urgent = assignments.filter(a => calculateDaysLeft(a.dueDate) <= 3 && a.progress < 100).length;
             const avgProgress = total > 0 ? Math.round(assignments.reduce((sum, a) => sum + a.progress, 0) / total) : 0;
+
+            console.log("All assignments:", assignments);
+            console.log("Progress values:", assignments.map(a => a.progress));
+            console.log("Sum of progress:", assignments.reduce((sum, a) => sum + a.progress, 0));
+            console.log("Total assignments:", total);
+            console.log("Calculated average:", avgProgress);
+
 
             document.getElementById('totalAssignments').textContent = total;
             document.getElementById('completedAssignments').textContent = completed;
