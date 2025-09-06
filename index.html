@@ -359,7 +359,7 @@
         function updateProgress(id, newProgress) {
             const assignment = assignments.find(a => a.id === id);
             if (assignment) {
-                assignment.progress = newProgress;
+                assignment.progress = parseInt(newProgress);
                 updateStats();
             }
         }
