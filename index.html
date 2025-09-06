@@ -237,7 +237,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎓 Ultimate Assignment Tracker</h1>
+            <h1>🎓 Ultimate Task Tracker</h1>
             <p>Stay organized and never miss a deadline again! By @yourstudentsupporter</p>
         </div>
         
@@ -274,6 +274,7 @@
                     <option>History</option>
                     <option>Computer Science</option>
                     <option>Art</option>
+                    <option>Psychology</option>
                     <option>Other</option>
                 </select>
             </div>
@@ -309,15 +310,8 @@
                 </tr>
             </thead>
             <tbody id="assignmentsTable">
-                <!-- Assignments will be added here -->
             </tbody>
         </table>
-        
-        <div class="gpa-section">
-            <div class="gpa-display" id="gpaDisplay">4.0</div>
-            <div>Current GPA Estimate</div>
-            <p style="margin-top: 10px; font-size: 14px;">Based on your assignment completion rate</p>
-        </div>
         
         <div class="watermark">
             <p>Created with ❤️ by @yourstudentsupporter | Get more study tips on TikTok & Instagram!</p>
@@ -328,6 +322,7 @@
         let assignments = [];
         let nextId = 1;
 
+        
         document.getElementById('dueDate').valueAsDate = new Date(Date.now() + 86400000);
 
         function addAssignment() {
@@ -435,15 +430,6 @@
             document.getElementById('completedAssignments').textContent = completed;
             document.getElementById('urgentAssignments').textContent = urgent;
             document.getElementById('avgProgress').textContent = avgProgress + '%';
-
-            let estimatedGPA = 4.0;
-            if (avgProgress < 60) estimatedGPA = 2.0;
-            else if (avgProgress < 70) estimatedGPA = 2.5;
-            else if (avgProgress < 80) estimatedGPA = 3.0;
-            else if (avgProgress < 90) estimatedGPA = 3.5;
-            else if (avgProgress < 95) estimatedGPA = 3.8;
-            
-            document.getElementById('gpaDisplay').textContent = estimatedGPA.toFixed(1);
         }
 
         function addSampleData() {
